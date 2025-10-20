@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Mathematics World</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs/lib/browser/math.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a192f, #112240, #1b2a41);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    }
+
+    header h1 {
+      color: #00ffff;
+      font-size: 2.2rem;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
+
+    main {
+      flex: 1;
+      width: 90%;
+      max-width: 900px;
+      margin-top: 30px;
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+      padding: 20px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #00ffff;
+      margin-bottom: 15px;
+      text-shadow: 0 0 5px #00ffff;
+    }
+
+    button {
+      background: #00ffff;
+      color: #0a192f;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #00b3b3;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+
+    .quote {
+      font-style: italic;
+      margin: 10px 0;
+      color: #00ffff;
+    }
+
+    /* Calculator */
+    .calc-container input {
+      width: 80%;
+      padding: 10px;
+      font-size: 1.2rem;
+      text-align: right;
+      border-radius: 8px;
+    }
+
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .calc-buttons button {
+      font-size: 1rem;
+      padding: 12px;
+    }
+
+    /* Quiz */
+    .quiz {
+      margin-top: 10px;
+    }
+
+    .graph-container {
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Advanced Mathematics World 🌍</h1>
+    <nav>
+      <a href="#quotes">Quotes</a>
+      <a href="#calculator">Calculator</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#graph">Graph</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Quotes Section -->
+    <section id="quotes">
+      <h2>📚 Math Quotes</h2>
+      <p id="quote" class="quote">"Pure mathematics is, in its way, the poetry of logical ideas." – Albert Einstein</p>
+      <button onclick="newQuote()">New Quote</button>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator">
+      <h2>🧮 Calculator</h2>
+      <div class="calc-container">
+        <input type="text" id="display" disabled />
+        <div class="calc-buttons">
+          <button onclick="press('7')">7</button>
+          <button onclick="press('8')">8</button>
+          <button onclick="press('9')">9</button>
+          <button onclick="press('/')">÷</button>
+          <button onclick="press('4')">4</button>
+          <button onclick="press('5')">5</button>
+          <button onclick="press('6')">6</button>
+          <button onclick="press('*')">×</button>
+          <button onclick="press('1')">1</button>
+          <button onclick="press('2')">2</button>
+          <button onclick="press('3')">3</button>
+          <button onclick="press('-')">−</button>
+          <button onclick="press('0')">0</button>
+          <button onclick="press('.')">.</button>
+          <button onclick="calculate()">=</button>
+          <button onclick="press('+')">+</button>
+          <button onclick="clearDisplay()" style="grid-column: span 4; background:#ff6666;">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+      <h2>🧠 Math Quiz</h2>
+      <p id="question"></p>
+      <input type="number" id="answer" placeholder="Your answer" />
+      <button onclick="checkAnswer()">Submit</button>
+      <p id="result"></p>
+      <button onclick="newQuestion()">Next Question</button>
+    </section>
+
+    <!-- Graph Plotter Section -->
+    <section id="graph">
+      <h2>📈 Function Plotter</h2>
+      <p>Enter a function of <b>x</b> (e.g. sin(x), x^2, log(x)):</p>
+      <input type="text" id="functionInput" placeholder="f(x) = ..." />
+      <button onclick="plotGraph()">Plot</button>
+      <div class="graph-container">
+        <canvas id="graphCanvas"></canvas>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <h2>📖 About Mathematics</h2>
+      <p>
+        Mathematics is the language of the universe — it reveals patterns, explains phenomena, and empowers human progress. 
+        From geometry to calculus, from logic to algorithms, math connects art, science, and technology in elegant harmony.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Advanced Mathematics World | Designed with 💙 by GPT-5
+  </footer>
+
+  <script>
+    /* ---------- QUOTES ---------- */
+    const quotes = [
+      `"Without mathematics, there’s nothing you can do." – Shakuntala Devi`,
+      `"The essence of mathematics lies in its freedom." – Cantor`,
+      `"Do not worry about your difficulties in mathematics; I assure you mine are greater." – Einstein`,
+      `"Mathematics is the most beautiful and most powerful creation of the human spirit." – Stefan Banach`,
+      `"Go down deep enough into anything and you will find mathematics." – Dean Schlicter`
+    ];
+
+    function newQuote() {
+      document.getElementById("quote").innerText =
+        quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    /* ---------- CALCULATOR ---------- */
+    function press(value) {
+      document.getElementById("display").value += value;
+    }
+
+    function calculate() {
+      const display = document.getElementById("display");
+      try {
+        display.value = math.evaluate(display.value);
+      } catch {
+        display.value = "Error";
+      }
+    }
+
+    function clearDisplay() {
+      document.getElementById("display").value = "";
+    }
+
+    /* ---------- QUIZ ---------- */
+    let currentAnswer = 0;
+    function newQuestion() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      const operations = ["+", "-", "*"];
+      const op = operations[Math.floor(Math.random() * operations.length)];
+      currentAnswer = eval(`${a} ${op} ${b}`);
+      document.getElementById("question").innerText = `What is ${a} ${op} ${b}?`;
+      document.getElementById("answer").value = "";
+      document.getElementById("result").innerText = "";
+    }
+    function checkAnswer() {
+      const user = parseFloat(document.getElementById("answer").value);
+      const result = document.getElementById("result");
+      if (user === currentAnswer) {
+        result.innerText = "✅ Correct!";
+        result.style.color = "#00ff99";
+      } else {
+        result.innerText = `❌ Wrong! Correct answer: ${currentAnswer}`;
+        result.style.color = "#ff6666";
+      }
+    }
+    newQuestion();
+
+    /* ---------- GRAPH PLOTTER ---------- */
+    function plotGraph() {
+      const input = document.getElementById("functionInput").value;
+      const ctx = document.getElementById("graphCanvas").getContext("2d");
+      const xValues = Array.from({ length: 100 }, (_, i) => (i - 50) / 5);
+      const yValues = xValues.map(x => {
+        try {
+          return math.evaluate(input, { x });
+        } catch {
+          return NaN;
+        }
+      });
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              label: `y = ${input}`,
+              data: yValues,
+              borderColor: "#00ffff",
+              borderWidth: 2,
+              pointRadius: 0,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: { title: { display: true, text: "x", color: "#00ffff" } },
+            y: { title: { display: true, text: "y", color: "#00ffff" } },
+          },
+          plugins: { legend: { labels: { color: "white" } } },
+        },
+      });
+    }
+  </script>
+</body>
+</html>
